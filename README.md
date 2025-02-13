@@ -36,6 +36,6 @@ Before running the application, ensure you replace the values of `TELEGRAM_BOT_T
 
 ## Authors
 This project was created by:
+Dariya Ablanova
 Inkar Ussurbayeva
 Leila Alpieva
-Dariya Ablanova
