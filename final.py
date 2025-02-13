@@ -3,11 +3,6 @@ import requests
 import datetime
 import os
 import io
-
-
-# Если вы используете последнюю версию LangChain, рекомендуется:
-# from langchain_community.llms import Ollama
-# Если нет — оставьте старый импорт:
 from langchain.llms.ollama import Ollama
 
 TELEGRAM_BOT_TOKEN = "7649680660:AAFVgGrxKyAPnpeBUGEqBzYfqYNLTupy6cI"
@@ -49,6 +44,70 @@ NEGATIVE_KEYWORDS = [
     "slut",
     "whore"
 ]
+
+# Дизайн
+st.set_page_config(layout="wide")
+st.markdown(
+    """
+    <style>
+    /* Фон приложения */
+    .stApp {
+        background-color: #476C9D;
+    }
+
+    /* Сайдбар */
+    section[data-testid="stSidebar"] {
+        background-color: #2E4C72;
+    }
+
+    /* Selectbox */
+    div[data-baseweb="select"] > div {
+        background-color: #1B3553;
+        border: 1px solid #1B3553;
+    }
+    ul {
+        background-color: #1B3553;
+        border: #1B3553;
+    }
+    li:hover {
+        background-color: #2E4C72;
+    }
+
+    /* Поля ввода input и textarea */
+    input[type="text"], input[type="number"], textarea {
+        background-color: #2E4C72;
+        border: 1px solid #2E4C72;
+    }
+
+    /* Стили для textarea (st.text_area) */
+    div[data-testid="stTextArea"] textarea {
+        background-color: #2E4C72;
+        border: 1px solid #2E4C72;
+    }
+
+    /* Фокус для всех input и textarea */
+    input:focus, textarea:focus {
+        border: 1px solid #7497CF !important;
+        outline: none;
+    }
+
+    /* Кнопка */
+    div.stButton > button:first-child {
+        background-color: #2E4C72;
+        border: 1px solid #1B3553;
+    }
+    div.stButton > button:hover {
+        background-color: #1B3553;
+        color: white;
+    }
+    div.stButton > button:active {
+        background-color: #7497CF;
+        color: black;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 def check_query(query: str):
     """
@@ -119,6 +178,7 @@ def generate_response(query: str, context: str = "") -> str:
 
 # --- Streamlit Interface ---
 st.title("Smart Customer Support Assistant")
+st.image("blue_cat.jpg", width=150)
 st.markdown("Enter your query below:")
 
 # Поле ввода запроса
@@ -146,13 +206,14 @@ if st.button("Send request") and user_input:
         st.success("Assistant's answer:")
         st.write(response)
 
-# Отображение истории диалога (краткосрочная память)
-st.markdown("## Dialogue history (short-term memory)")
-for entry in st.session_state.chat_history:
-    st.write(f"**{entry['user']}:** {entry['message']}")
-
-# Отображение долговременной памяти (история общения)
-st.markdown("## Long-term memory (communication history)")
-long_term_content = get_long_term_memory()
-st.text_area("Long-term memory", long_term_content, height=200)
+with st.sidebar:
+    # Отображение истории диалога (краткосрочная память)
+    st.markdown("## Dialogue history (short-term memory)")
+    for entry in st.session_state.chat_history:
+        st.write(f"**{entry['user']}:** {entry['message']}")
+    
+    # Отображение долговременной памяти (история общения)
+    st.markdown("## Long-term memory (communication history)")
+    long_term_content = get_long_term_memory()
+    st.text_area("Long-term memory", long_term_content, height=200)
 
